@@ -1,7 +1,7 @@
 {
   "name": "zoho-invoice",
   "version": "0.1.0",
-  "description": "",
+  "description": "Node.js bindings for the Zoho Invoice API.",
   "main": "dist/zoho-invoice.js",
   "scripts": {
     "compile": "gulp 6to5",
@@ -9,7 +9,7 @@
     "coveralls": "gulp coveralls",
     "travis": "npm run coveralls -s && ((cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js) || exit 0)",
     "docs": "gulp docs",
-    "prepublish": "npm run compile && npm run docs"
+    "prepublish": "npm run test && npm run compile && npm run docs"
   },
   "repository": {
     "type": "git",
@@ -42,7 +42,6 @@
     "isparta": "^3.1.0",
     "jshint-stylish": "^2.0.1",
     "mocha": "^2.2.5",
-    "mongoose": "^4.2.2",
     "sinon": "^1.17.2"
   },
   "dependencies": {
