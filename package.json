@@ -1,5 +1,5 @@
 {
-  "name": "zoho-invoice-node",
+  "name": "zoho-invoice",
   "version": "0.1.0",
   "description": "",
   "main": "dist/zoho-invoice.js",
