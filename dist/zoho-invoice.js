@@ -39,4 +39,6 @@ var ZohoInvoice = (function () {
     return ZohoInvoice;
 })();
 
-module.exports = ZohoInvoice;
+module.exports = function (authtoken) {
+    return new ZohoInvoice(authtoken);
+};

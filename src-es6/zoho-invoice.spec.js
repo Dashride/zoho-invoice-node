@@ -4,7 +4,7 @@ import ZohoInvoice from './zoho-invoice';
 describe('zoho-invoice', function() {
 
     it('should create an instance', function() {
-        let zohoInvoice = new ZohoInvoice();
+        let zohoInvoice = ZohoInvoice();
 
         expect(zohoInvoice).to.have.all.keys([
             'AUTH_TOKEN',
@@ -19,12 +19,12 @@ describe('zoho-invoice', function() {
     });
 
     it('should set the authtoken via the constructor', function() {
-        let zohoInvoice = new ZohoInvoice('123456');
+        let zohoInvoice = ZohoInvoice('123456');
         expect(zohoInvoice.AUTH_TOKEN).to.equal('123456');
     });
 
     it('should set the authtoken via the setAuthToken method', function() {
-        let zohoInvoice = new ZohoInvoice();
+        let zohoInvoice = ZohoInvoice();
         zohoInvoice.setAuthToken('123456');
         expect(zohoInvoice.AUTH_TOKEN).to.equal('123456');
     });
