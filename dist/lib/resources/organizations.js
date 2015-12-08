@@ -14,30 +14,22 @@ var _zohoResource = require('../zoho-resource');
 
 var _zohoMethod = require('../zoho-method');
 
-var Invoices = (function (_ZohoResource) {
-    _inherits(Invoices, _ZohoResource);
+var Organizations = (function (_ZohoResource) {
+    _inherits(Organizations, _ZohoResource);
 
-    function Invoices() {
-        _classCallCheck(this, Invoices);
+    function Organizations() {
+        _classCallCheck(this, Organizations);
 
         for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
             args[_key] = arguments[_key];
         }
 
-        _get(Object.getPrototypeOf(Invoices.prototype), 'constructor', this).apply(this, args);
-        this.path = 'invoices';
-        this.includeCRUD = ['create', 'list', 'retrieve', 'update', 'remove'];
+        _get(Object.getPrototypeOf(Organizations.prototype), 'constructor', this).apply(this, args);
+        this.resourcePath = 'organizations';
+        this._includeBasicMethods(['create', 'list', 'retrieve', 'update']);
     }
 
-    return Invoices;
+    return Organizations;
 })(_zohoResource.ZohoResource);
 
-Invoices.prototype.markAsSent = (0, _zohoMethod.ZohoMethod)({
-    method: 'POST',
-    path: function path(id) {
-        return id + '/status/sent';
-    },
-    urlParams: ['id']
-});
-
-exports.Invoices = Invoices;
+exports.Organizations = Organizations;

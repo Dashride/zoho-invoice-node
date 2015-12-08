@@ -14,43 +14,61 @@ var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
 
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
 var _requestPromise = require('request-promise');
 
 var _requestPromise2 = _interopRequireDefault(_requestPromise);
 
-var _zohoMethodBasic = require('./zoho-method-basic');
+var _zohoBasicMethods = require('./zoho-basic-methods');
 
 var ZohoResource = (function () {
     function ZohoResource(zohoInvoice) {
         _classCallCheck(this, ZohoResource);
 
         this._zohoInvoice = zohoInvoice;
-        this.basePath = '';
-        this.path = '';
-
-        if (this.includeCRUD) {
-            // for loop and add basic methods
-            this.includeCRUD.forEach(function (methodName) {
-                this[methodName] = _zohoMethodBasic.ZohoBasicMethods[methodName];
-            });
-        }
+        this.resourcePath = '';
     }
 
     _createClass(ZohoResource, [{
         key: 'createFullPath',
         value: function createFullPath(commandPath, urlData) {
-            return _path2['default'].join(this._zohoInvoice.basePath, this.path, commandPath);
+            var urlParts = [this._zohoInvoice.API_PATH, this.resourcePath];
+
+            if (commandPath && typeof commandPath === 'function') {
+                urlParts.push(commandPath(urlData));
+            }
+
+            return _path2['default'].join.apply(this, urlParts);
         }
     }, {
         key: 'createRequestURI',
-        value: function createRequestURI(path) {
-            return path.join(this._zohoInvoice.apiHost, path);
+        value: function createRequestURI(urlPath) {
+            return this._zohoInvoice.API_PROTOCOL + '://' + _path2['default'].join(this._zohoInvoice.API_HOST, urlPath);
+        }
+    }, {
+        key: '_includeBasicMethods',
+        value: function _includeBasicMethods(methods) {
+            var _this = this;
+
+            if (methods.length) {
+                // for loop and add basic methods
+                methods.forEach(function (methodName) {
+                    _this[methodName] = _zohoBasicMethods.ZohoBasicMethods[methodName];
+                });
+            }
         }
     }, {
         key: '_request',
         value: function _request(method, path, options, data) {
-            var authToken = this.authtoken;
+            var authToken = this._zohoInvoice.AUTH_TOKEN;
             var requestURI = this.createRequestURI(path);
+
+            if (!authToken) {
+                throw new Error('No auth token provided.');
+            }
 
             var requestOptions = {
                 method: method,
@@ -62,13 +80,18 @@ var ZohoResource = (function () {
                 json: true
             };
 
-            Object.assign(requestOptions.qs, options);
+            _lodash2['default'].assign(requestOptions.qs, options);
 
             if (Object.keys(data).length) {
-                options.form.JSONString = JSON.stringify(data);
+                requestOptions.form.JSONString = JSON.stringify(data);
             }
 
-            return (0, _requestPromise2['default'])(requestOptions);
+            return this._makeRequest(requestOptions);
+        }
+    }, {
+        key: '_makeRequest',
+        value: function _makeRequest(options) {
+            return (0, _requestPromise2['default'])(options);
         }
     }]);
 

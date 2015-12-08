@@ -2,16 +2,16 @@
 
 require('babel/register');
 
-var fs = require('fs'),
-    gulp = require('gulp'),
-    gutil = require("gulp-util"),
-    mocha = require('gulp-mocha'),
-    istanbul = require('gulp-istanbul'),
-    jshint = require('gulp-jshint'),
-    jsdoc2md = require('gulp-jsdoc-to-markdown'),
-    concat = require("gulp-concat"),
-    babel = require('gulp-babel'),
-    isparta = require('isparta');
+var fs = require('fs');
+var gulp = require('gulp');
+var gutil = require('gulp-util');
+var mocha = require('gulp-mocha');
+var istanbul = require('gulp-istanbul');
+var jshint = require('gulp-jshint');
+var jsdoc2md = require('gulp-jsdoc-to-markdown');
+var concat = require('gulp-concat');
+var babel = require('gulp-babel');
+var isparta = require('isparta');
 
 var paths = {
     es6: {
@@ -32,7 +32,7 @@ gulp.task('watch', ['test'], function(done) {
 gulp.task('6to5', function() {
     return gulp.src(paths.es6.js)
         .pipe(babel())
-        .pipe(gulp.dest('lib'));
+        .pipe(gulp.dest('dist'));
 });
 
 gulp.task('lint', function() {
@@ -55,7 +55,7 @@ gulp.task('coveralls', function(done) {
                     reporter: 'spec'
                 }))
                 .pipe(istanbul.writeReports({
-                    reporters: [ 'lcovonly', 'text' ],
+                    reporters: ['lcovonly', 'text'],
                 }));
         });
 });
@@ -64,7 +64,7 @@ gulp.task('coverage', function(done) {
     return gulp.src(paths.es6.js)
         .pipe(istanbul({
             instrumenter: isparta.Instrumenter,
-            includeUntested: false
+            includeUntested: true
         }))
         .pipe(istanbul.hookRequire())
         .on('finish', function() {
@@ -73,7 +73,7 @@ gulp.task('coverage', function(done) {
                     reporter: 'spec'
                 }))
                 .pipe(istanbul.writeReports({
-                    reporters: [ 'text', 'html' ],
+                    reporters: ['text', 'html'],
                 }));
         });
 });
@@ -89,7 +89,7 @@ gulp.task('docs', function() {
     return gulp.src(paths.es6.js)
         .pipe(concat('README.md'))
         .pipe(jsdoc2md({template: fs.readFileSync('./readme.hbs', 'utf8')}))
-        .on('error', function(err){
+        .on('error', function(err) {
             gutil.log('jsdoc2md failed:', err.message);
         })
         .pipe(gulp.dest('.'));

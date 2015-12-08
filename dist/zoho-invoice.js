@@ -4,23 +4,35 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
+var _libResourcesContacts = require('./lib/resources/contacts');
+
 var _libResourcesInvoices = require('./lib/resources/invoices');
 
+var _libResourcesOrganizations = require('./lib/resources/organizations');
+
+var _libResourcesSettings = require('./lib/resources/settings');
+
 var ZohoInvoice = (function () {
-    function ZohoInvoice(authtoken) {
+    function ZohoInvoice() {
+        var authtoken = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
+
         _classCallCheck(this, ZohoInvoice);
 
-        this.authtoken = authtoken;
-        this.apiHost = 'https://invoice.zoho.com';
-        this.basePath = '/api/v3';
+        this.AUTH_TOKEN = authtoken;
+        this.API_PROTOCOL = 'https';
+        this.API_HOST = 'invoice.zoho.com';
+        this.API_PATH = '/api/v3';
 
         this.invoices = new _libResourcesInvoices.Invoices(this);
+        this.contacts = new _libResourcesContacts.Contacts(this);
+        this.organizations = new _libResourcesOrganizations.Organizations(this);
+        this.settings = new _libResourcesSettings.Settings(this);
     }
 
     _createClass(ZohoInvoice, [{
-        key: 'authToken',
-        get: function get() {
-            return this.authToken;
+        key: 'setAuthToken',
+        value: function setAuthToken(token) {
+            this.AUTH_TOKEN = token;
         }
     }]);
 

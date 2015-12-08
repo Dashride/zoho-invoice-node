@@ -1,40 +1,51 @@
 import path from 'path';
+import _ from 'lodash';
 import request from 'request-promise';
-import { ZohoBasicMethods } from './zoho-method-basic';
+import { ZohoBasicMethods } from './zoho-basic-methods';
 
 class ZohoResource {
 
     constructor(zohoInvoice) {
         this._zohoInvoice = zohoInvoice;
-        this.basePath = '';
-        this.path = '';
+        this.resourcePath = '';
+    }
 
-        if (this.includeCRUD) {
+    createFullPath(commandPath, urlData) {
+        let urlParts = [
+            this._zohoInvoice.API_PATH,
+            this.resourcePath
+        ];
+
+        if (commandPath && typeof commandPath === 'function') {
+            urlParts.push(commandPath(urlData));
+        }
+
+        return path.join.apply(this, urlParts);
+    }
+
+    createRequestURI(urlPath) {
+        return this._zohoInvoice.API_PROTOCOL + '://' + path.join(
+            this._zohoInvoice.API_HOST,
+            urlPath
+        );
+    }
+
+    _includeBasicMethods(methods) {
+        if (methods.length) {
             // for loop and add basic methods
-            this.includeCRUD.forEach(function(methodName) {
+            methods.forEach((methodName) => {
                 this[methodName] = ZohoBasicMethods[methodName];
             });
         }
     }
 
-    createFullPath(commandPath, urlData) {
-        return path.join(
-            this._zohoInvoice.basePath,
-            this.path,
-            commandPath
-        );
-    }
-
-    createRequestURI(path) {
-        return path.join(
-            this._zohoInvoice.apiHost,
-            path
-        );
-    }
-
     _request(method, path, options, data) {
-        let authToken = this.authtoken;
+        let authToken = this._zohoInvoice.AUTH_TOKEN;
         let requestURI = this.createRequestURI(path);
+
+        if (!authToken) {
+            throw new Error('No auth token provided.');
+        }
 
         let requestOptions = {
             method: method,
@@ -46,13 +57,17 @@ class ZohoResource {
             json: true
         };
 
-        Object.assign(requestOptions.qs, options);
+        _.assign(requestOptions.qs, options);
 
         if (Object.keys(data).length) {
-            options.form.JSONString = JSON.stringify(data);
+            requestOptions.form.JSONString = JSON.stringify(data);
         }
 
-        return request(requestOptions);
+        return this._makeRequest(requestOptions);
+    }
+
+    _makeRequest(options) {
+        return request(options);
     }
 
 }
