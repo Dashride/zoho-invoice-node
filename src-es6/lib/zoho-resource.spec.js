@@ -2,6 +2,7 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import _ from 'lodash';
 import { ZohoResource } from './zoho-resource';
+import { ZohoAPIError } from './zoho-api-error';
 
 describe('zoho-resource', function() {
     let context = {

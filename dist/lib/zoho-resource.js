@@ -22,6 +22,8 @@ var _requestPromise = require('request-promise');
 
 var _requestPromise2 = _interopRequireDefault(_requestPromise);
 
+var _zohoApiError = require('./zoho-api-error');
+
 var _zohoBasicMethods = require('./zoho-basic-methods');
 
 var ZohoResource = (function () {
@@ -91,7 +93,12 @@ var ZohoResource = (function () {
     }, {
         key: '_makeRequest',
         value: function _makeRequest(options) {
-            return (0, _requestPromise2['default'])(options);
+            return (0, _requestPromise2['default'])(options)['catch'](this._handleAPIError);
+        }
+    }, {
+        key: '_handleAPIError',
+        value: function _handleAPIError(err) {
+            return Promise.reject(new _zohoApiError.ZohoAPIError(err.error));
         }
     }]);
 

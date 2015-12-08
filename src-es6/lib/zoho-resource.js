@@ -1,6 +1,7 @@
 import path from 'path';
 import _ from 'lodash';
 import request from 'request-promise';
+import { ZohoAPIError } from './zoho-api-error';
 import { ZohoBasicMethods } from './zoho-basic-methods';
 
 class ZohoResource {
@@ -67,7 +68,12 @@ class ZohoResource {
     }
 
     _makeRequest(options) {
-        return request(options);
+        return request(options)
+            .catch(this._handleAPIError);
+    }
+
+    _handleAPIError(err) {
+        return Promise.reject(new ZohoAPIError(err.error));
     }
 
 }
