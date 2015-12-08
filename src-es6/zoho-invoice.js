@@ -21,4 +21,12 @@ class ZohoInvoice {
     }
 }
 
-module.exports = ZohoInvoice;
+var zohoInvoice = null;
+
+module.exports = function(authtoken) {
+    if (!(zohoInvoice instanceof ZohoInvoice)) {
+        zohoInvoice = new ZohoInvoice(authtoken);
+    }
+
+    return zohoInvoice;
+};
