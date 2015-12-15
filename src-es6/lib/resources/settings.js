@@ -55,6 +55,12 @@ class Settings extends ZohoResource {
             urlParams: []
         });
 
+        this.listTemplates = ZohoMethod({
+            method: 'GET',
+            path: () => `templates`,
+            urlParams: []
+        });
+
     }
 
 }

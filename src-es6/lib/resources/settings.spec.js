@@ -24,7 +24,8 @@ describe('settings', function() {
             'getInvoiceSettings',
             'updateInvoiceSettings',
             'getInvoiceNotesAndTerms',
-            'updateInvoiceNotesAndTerms'
+            'updateInvoiceNotesAndTerms',
+            'listTemplates'
         ]);
     });
 

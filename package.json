@@ -1,6 +1,6 @@
 {
   "name": "zoho-invoice",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Node.js bindings for the Zoho Invoice API.",
   "main": "dist/zoho-invoice.js",
   "scripts": {

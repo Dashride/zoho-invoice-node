@@ -93,6 +93,14 @@ var Settings = (function (_ZohoResource) {
             },
             urlParams: []
         });
+
+        this.listTemplates = (0, _zohoMethod.ZohoMethod)({
+            method: 'GET',
+            path: function path() {
+                return 'templates';
+            },
+            urlParams: []
+        });
     }
 
     return Settings;
